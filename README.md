@@ -12,7 +12,24 @@ uv venv -p 3.12   # ROS2 Jazzy; use -p 3.10 for Humble
 uv sync
 ```
 
-The Python version must match your ROS distro: 3.12 for Jazzy, 3.10 for Humble. Requires a ROS2 installation sourced in your shell.
+The Python version must match your ROS distro: 3.12 for Jazzy, 3.10 for Humble.
+
+Pick the torch build for your hardware:
+```bash
+# cuda
+# installed by uv sync, nothing to do
+
+# amd
+uv pip install torch==2.12.1+rocm7.2 torchvision==0.27.1+rocm7.2 --index-url https://download.pytorch.org/whl/rocm7.2
+export UV_NO_SYNC=1
+
+# cpu
+uv pip install torch==2.12.1+cpu torchvision==0.27.1+cpu --index-url https://download.pytorch.org/whl/cpu
+export UV_NO_SYNC=1
+```
+
+> [!NOTE]
+> `UV_NO_SYNC=1` stops `uv run` from syncing the environment back to the lockfile, which would restore the CUDA build. Requires a ROS2 installation sourced in your shell.
 
 ### Running the code
 
