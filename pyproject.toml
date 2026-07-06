@@ -1,23 +1,26 @@
-[tool.poetry]
+[project]
 name = "visualnav_transformer"
 version = "0.1.0"
 description = ""
-authors = ["maciejmajek <maciej.majek@robotec.ai>"]
+authors = [{ name = "maciejmajek", email = "maciej.majek@robotec.ai" }]
 readme = "README.md"
+requires-python = ">=3.10, <3.13"
+dependencies = [
+    "torch>=2.3",
+    "diffusion-policy",
+    "diffusers>=0.29.1",
+    "efficientnet-pytorch>=0.7.1",
+    "vit-pytorch>=1.7.0",
+    "prettytable>=3.10.0",
+    "numpy<2",
+]
 
-[tool.poetry.dependencies]
-python = "^3.10, <3.13"
-torch = "^2.3"
-diffusion-policy = {git = "https://github.com/RobotecAI/diffusion_policy.git", branch = "main"}
-diffusers = "^0.29.1"
-efficientnet-pytorch = "^0.7.1"
-vit-pytorch = "^1.7.0"
-prettytable = "^3.10.0"
-numpy="<2"
+[tool.uv.sources]
+diffusion-policy = { git = "https://github.com/RobotecAI/diffusion_policy.git", branch = "main" }
 
 [tool.setuptools]
 packages = { find = { where = ["src"] } }
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
