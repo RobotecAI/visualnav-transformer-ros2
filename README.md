@@ -24,7 +24,7 @@ docker run -it --env ROS_DOMAIN_ID=$ROS_DOMAIN_ID --rm --gpus=all --net=host vis
 
 Inside the container, run the following commands:
 ```bash
-poetry shell
+`poetry env activate`
 python src/visualnav_transformer/deployment/src/explore.py
 ```
 This will run the model and publish the predicted waypoints to a ROS2 topic, but your robot will not move yet. Next to running the model you have to run a script that will publish the movement commands to the robot.
