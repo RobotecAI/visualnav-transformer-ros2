@@ -4,7 +4,7 @@ This repository is a port of [visualnav-transformer](https://github.com/robodhru
 
 ### Installation (uv)
 
-The project's Python dependencies are managed with [uv](https://docs.astral.sh/uv/). The Docker images below install everything automatically, so a local setup is optional — it is only needed to run the visualization (`uv run python scripts/visualize.py`) on your host; everything else can run in Docker:
+The project's Python dependencies are managed with [uv](https://docs.astral.sh/uv/). The Docker images below install everything automatically, so this step is optional. You only need a local setup to run the visualization (`uv run python scripts/visualize.py`) on your host. Everything else can run in Docker.
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -61,7 +61,8 @@ Inside the container, run the following commands:
 uv run python src/visualnav_transformer/deployment/src/explore.py
 ```
 
-> Tip: instead of prefixing every command with `uv run`, you can activate the environment once with `source .venv/bin/activate` and call `python` directly.
+> [!TIP]
+> Instead of prefixing every command with `uv run`, you can activate the environment once with `source .venv/bin/activate` and then just use `python`.
 
 This will run the model and publish the predicted waypoints to a ROS2 topic, but your robot will not move yet. Next to running the model you have to run a script that will publish the movement commands to the robot.
 
