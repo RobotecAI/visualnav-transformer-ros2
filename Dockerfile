@@ -41,17 +41,31 @@ RUN pip3 install gdown
 # Install uv
 RUN pip3 install uv
 
-# Clone the VisualNav-Transformer repository
-RUN git clone https://github.com/Robotecai/visualnav-transformer-ros2.git /visualnav-transformer
-
 # Set up environment variables
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
+
+# Copy the repository
+COPY . /visualnav-transformer
 
 # Set the working directory
 WORKDIR /visualnav-transformer
 
 # Install dependencies using uv
 RUN uv sync
+
+# Torch build to use: nvidia (CUDA, default), amd (ROCm) or cpu
+ARG TORCH_VARIANT=nvidia
+RUN if [ "$TORCH_VARIANT" = "amd" ]; then \
+        uv pip install torch==2.12.1+rocm7.2 torchvision==0.27.1+rocm7.2 --index-url https://download.pytorch.org/whl/rocm7.2; \
+    elif [ "$TORCH_VARIANT" = "cpu" ]; then \
+        uv pip install torch==2.12.1+cpu torchvision==0.27.1+cpu --index-url https://download.pytorch.org/whl/cpu; \
+    elif [ "$TORCH_VARIANT" != "nvidia" ]; then \
+        echo "Invalid TORCH_VARIANT '$TORCH_VARIANT' (expected: nvidia, amd or cpu)" && exit 1; \
+    fi
+
+# Prevent `uv run` from re-syncing the venv to the lockfile, which would
+# replace the torch variant installed above with the default CUDA build
+ENV UV_NO_SYNC=1
 
 RUN mkdir /visualnav-transformer/model_weights
 RUN gdown https://drive.google.com/uc?id=1YJhkkMJAYOiKNyCaelbS_alpUpAJsOUb -O /visualnav-transformer/model_weights/nomad.pth

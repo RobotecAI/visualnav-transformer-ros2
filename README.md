@@ -33,6 +33,11 @@ docker build -t visualnav_transformer:latest .
 docker build --build-arg ROS_DISTRO=humble -t visualnav_transformer:latest .
 ```
 
+The PyTorch build is selected with the `TORCH_VARIANT` build argument: `nvidia` (CUDA, default), `amd` (ROCm) or `cpu`:
+```bash
+docker build --build-arg TORCH_VARIANT=amd -t visualnav_transformer:latest .
+```
+
 3. Run the Docker container:
 
 **NVIDIA GPU** (requires the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)):
@@ -40,17 +45,12 @@ docker build --build-arg ROS_DISTRO=humble -t visualnav_transformer:latest .
 docker run -it --env ROS_DOMAIN_ID=$ROS_DOMAIN_ID --rm --gpus=all --net=host visualnav_transformer:latest
 ```
 
-**AMD GPU** (requires [ROCm](https://rocm.docs.amd.com/) drivers on the host):
+**AMD GPU** (requires [ROCm](https://rocm.docs.amd.com/) drivers on the host and an image built with `TORCH_VARIANT=amd`):
 ```bash
 docker run -it --env ROS_DOMAIN_ID=$ROS_DOMAIN_ID --rm --net=host \
     --device=/dev/kfd --device=/dev/dri \
     --group-add video --security-opt seccomp=unconfined \
     visualnav_transformer:latest
-```
-
-The image ships with the default (CUDA) PyTorch build. On AMD, replace it with the ROCm build inside the container:
-```bash
-uv pip install torch==2.3.1 --index-url https://download.pytorch.org/whl/rocm7.2
 ```
 
 4. Run the model:
