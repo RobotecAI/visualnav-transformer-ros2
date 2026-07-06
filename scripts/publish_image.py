@@ -30,7 +30,7 @@ class ImagePublisherNode(Node):
 
         ros_image = self.bridge.cv2_to_imgmsg(noisy_image, encoding="bgr8")
         self.publisher_.publish(ros_image)
-        self.get_logger().info("Publishing image")
+        self.get_logger().info("Publishing image", throttle_duration_sec=1.0)
 
 
 def main():

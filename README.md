@@ -49,9 +49,10 @@ docker run -it --env ROS_DOMAIN_ID=$ROS_DOMAIN_ID --rm --gpus=all --net=host vis
 ```bash
 docker run -it --env ROS_DOMAIN_ID=$ROS_DOMAIN_ID --rm --net=host \
     --device=/dev/kfd --device=/dev/dri \
-    --group-add video --security-opt seccomp=unconfined \
     visualnav_transformer:latest
 ```
+
+If the GPU is not detected inside the container, try adding `--group-add video --group-add render` and `--security-opt seccomp=unconfined`.
 
 4. Run the model:
 

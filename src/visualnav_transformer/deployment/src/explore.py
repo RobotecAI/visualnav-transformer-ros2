@@ -159,7 +159,7 @@ def main(args: argparse.Namespace):
                     naction = noise_scheduler.step(
                         model_output=noise_pred, timestep=k, sample=naction
                     ).prev_sample
-                print("time elapsed:", time.time() - start_time)
+                inference_time = time.time() - start_time
 
             naction = to_numpy(get_action(naction))
             sampled_actions_msg = Float32MultiArray()
@@ -168,10 +168,8 @@ def main(args: argparse.Namespace):
             ).tolist()
             node.sampled_actions_pub.publish(sampled_actions_msg)
 
-            print(naction)
             naction = naction[0]  # change this based on heuristic
 
-            print(args.waypoint)
             chosen_waypoint = naction[args.waypoint]
 
             if model_params["normalize"]:
@@ -179,7 +177,11 @@ def main(args: argparse.Namespace):
             waypoint_msg.data = chosen_waypoint.tolist()
             node.waypoint_pub.publish(waypoint_msg)
 
-            print("Published waypoint")
+            node.get_logger().info(
+                f"Published waypoint {np.round(chosen_waypoint, 2).tolist()} "
+                f"(inference: {inference_time:.2f}s)",
+                throttle_duration_sec=1.0,
+            )
             elapsed_time = time.time() - loop_start_time
             sleep_time = max(0, (1.0 / RATE) - elapsed_time)
             time.sleep(sleep_time)
