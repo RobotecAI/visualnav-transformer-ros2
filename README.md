@@ -4,7 +4,7 @@ This repository is a port of [visualnav-transformer](https://github.com/robodhru
 
 ### Installation (uv)
 
-The project's Python dependencies are managed with [uv](https://docs.astral.sh/uv/). The Docker images below install everything automatically, but for a local (non-Docker) setup:
+The project's Python dependencies are managed with [uv](https://docs.astral.sh/uv/). The Docker images below install everything automatically, so a local setup is optional — it is only needed to run the visualization (`uv run python scripts/visualize.py`) on your host; everything else can run in Docker:
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
