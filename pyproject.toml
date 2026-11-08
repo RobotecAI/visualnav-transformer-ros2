@@ -21,6 +21,11 @@ diffusion-policy = { git = "https://github.com/RobotecAI/diffusion_policy.git", 
 [tool.setuptools]
 packages = { find = { where = ["src"] } }
 
+# Ship non-Python files (configs, launch and helper scripts) as the poetry build did.
+# vint_train reads data/data_config.yaml at import time.
+[tool.setuptools.package-data]
+"*" = ["*.yaml", "*.yml", "*.sh", "*.launch", "*.md", "*.txt"]
+
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
